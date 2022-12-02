@@ -81,6 +81,7 @@ namespace Elmah.Io.Wpf
                 User = WindowsIdentity.GetCurrent().Name,
                 Hostname = Hostname(),
                 Breadcrumbs = Breadcrumbs(),
+                Application = _options.Application,
             };
 
             if (_options.OnFilter != null && _options.OnFilter(createMessage))
