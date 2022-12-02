@@ -82,6 +82,10 @@ namespace Elmah.Io.Wpf
                 Hostname = Hostname(),
                 Breadcrumbs = Breadcrumbs(),
                 Application = _options.Application,
+                ServerVariables = new List<Item>
+                {
+                    new Item("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion}; ENGINE=Wpf"),
+                }
             };
 
             if (_options.OnFilter != null && _options.OnFilter(createMessage))
@@ -183,7 +187,8 @@ namespace Elmah.Io.Wpf
         private static List<Item> PropertiesToData(Exception exception)
         {
             var items = new List<Item>();
-            var properties = Application.Current.Properties;
+            var application = Application.Current;
+            var properties = application.Properties;
             foreach (var key in properties.Keys)
             {
                 var value = properties[key];
@@ -194,6 +199,11 @@ namespace Elmah.Io.Wpf
             {
                 items.AddRange(exception.ToDataList());
             }
+
+            if (application.MainWindow?.Width > 0) items.Add(new Item("Browser-Width", ((int)application.MainWindow.Width).ToString()));
+            if (application.MainWindow?.Height > 0) items.Add(new Item("Browser-Height", ((int)application.MainWindow.Height).ToString()));
+            if (SystemParameters.PrimaryScreenWidth > 0) items.Add(new Item("Screen-Width", ((int)SystemParameters.PrimaryScreenWidth).ToString()));
+            if (SystemParameters.PrimaryScreenWidth > 0) items.Add(new Item("Screen-Height", ((int)SystemParameters.PrimaryScreenHeight).ToString()));
 
             return items;
         }
