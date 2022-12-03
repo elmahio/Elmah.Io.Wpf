@@ -84,7 +84,7 @@ namespace Elmah.Io.Wpf
                 Application = _options.Application,
                 ServerVariables = new List<Item>
                 {
-                    new Item("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion}; ENGINE=Wpf"),
+                    new Item("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion.Version}; ENGINE=WPF"),
                 }
             };
 
