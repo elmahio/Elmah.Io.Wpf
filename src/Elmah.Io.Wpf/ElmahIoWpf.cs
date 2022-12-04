@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace Elmah.Io.Wpf
 {
@@ -82,6 +83,7 @@ namespace Elmah.Io.Wpf
                 Hostname = Hostname(),
                 Breadcrumbs = Breadcrumbs(),
                 Application = _options.Application,
+                Url = Url(),
                 ServerVariables = new List<Item>
                 {
                     new Item("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion.Version}; ENGINE=WPF"),
@@ -155,6 +157,29 @@ namespace Elmah.Io.Wpf
 
             var breadcrumb = new Breadcrumb(DateTime.UtcNow, "Information", "Navigation", $"{action} {target}");
             AddBreadcrumb(breadcrumb);
+        }
+
+        private static string Url()
+        {
+            var application = Application.Current;
+            if (application.Windows == null || application.Windows.Count < 1) return null;
+
+            var activeWindow = application
+                .Windows
+                .OfType<Window>()
+                .FirstOrDefault(w => w.IsActive);
+
+            if (activeWindow == null) return null;
+
+            try
+            {
+                var uri = BaseUriHelper.GetBaseUri(activeWindow);
+                return uri?.AbsolutePath;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static string Hostname()
