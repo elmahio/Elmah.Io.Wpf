@@ -35,7 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elmah.Io.Client" Version="[4.4.45-pre,5)" />
+		<PackageReference Include="Elmah.Io.Client" Version="[4.4.54-pre,5)" />
 		<PackageReference Include="System.Management" Version="[4.6.0,)" />
 	</ItemGroup>
 
