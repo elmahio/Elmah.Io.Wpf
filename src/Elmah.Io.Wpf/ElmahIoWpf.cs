@@ -230,7 +230,52 @@ namespace Elmah.Io.Wpf
             if (SystemParameters.PrimaryScreenWidth > 0) items.Add(new Item("Screen-Width", ((int)SystemParameters.PrimaryScreenWidth).ToString()));
             if (SystemParameters.PrimaryScreenWidth > 0) items.Add(new Item("Screen-Height", ((int)SystemParameters.PrimaryScreenHeight).ToString()));
 
+            AddMachine(items);
+
             return items;
+        }
+
+        // Credit goes to: https://weblog.west-wind.com/posts/2023/Feb/02/Basic-Windows-Machine-Hardware-information-from-WMI-for-Exception-Logging-from-NET
+        private static void AddMachine(List<Item> items)
+        {
+            try
+            {
+                string machine = null;
+
+                using (var searcher = new System.Management.ManagementObjectSearcher("Select Manufacturer, Model from Win32_ComputerSystem"))
+                {
+                    using (var managementObjects = searcher.Get())
+                    {
+                        foreach (var item in managementObjects)
+                        {
+                            string manufacturer = item["Manufacturer"].ToString();
+                            string model = item["Model"].ToString();
+                            machine = manufacturer + " " + model;
+                        }
+                    }
+                }
+
+                using (var searcher = new System.Management.ManagementObjectSearcher(
+                       "Select * from Win32_DisplayConfiguration"))
+                {
+                    string graphicsCard = string.Empty;
+                    using (var managementObjects = searcher.Get())
+                    {
+                        foreach (var item in managementObjects)
+                        {
+                            string gpu = item["Description"].ToString();
+
+                            machine += ", " + gpu;
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(machine))
+                {
+                    items.Add(new Item("Machine", machine));
+                }
+            }
+            catch {}
         }
 
         private static string UserAgent()
