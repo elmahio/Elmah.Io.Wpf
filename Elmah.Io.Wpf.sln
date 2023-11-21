@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elmah.Io.Wpf.Net80", "samples\Elmah.Io.Wpf.Net80\Elmah.Io.Wpf.Net80.csproj", "{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{91FC2471-9D24-444D-B5E1-5CD20EC5AFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91FC2471-9D24-444D-B5E1-5CD20EC5AFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91FC2471-9D24-444D-B5E1-5CD20EC5AFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{DD5BB7A0-6C9B-4E44-8A6B-F15BFDEFDAD4} = {E6EFB474-70CA-40F0-A82F-572235B50DBC}
 		{B823CB00-23ED-46D2-8BDD-DEBCCBD0F03C} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
 		{91FC2471-9D24-444D-B5E1-5CD20EC5AFF9} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
+		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C1F1BB5-86C9-48CE-9874-8643E47F4A3B}
