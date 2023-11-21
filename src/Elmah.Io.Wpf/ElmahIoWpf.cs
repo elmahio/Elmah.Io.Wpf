@@ -223,6 +223,14 @@ namespace Elmah.Io.Wpf
             if (exception != null)
             {
                 items.AddRange(exception.ToDataList());
+
+                // The Dispatcher is using the Data dictionary on exceptions for some internal bookkeeping. This results in an empty
+                // item being added with the key System.Object and a null value. Since this will never be interesting for anyone
+                // outside of the Dispatcher we remove it. The source code doing this small trick is here:
+                // https://github.com/dotnet/wpf/blob/ed058c1ab3f5594110731354794c5dfa0debdbd4/src/Microsoft.DotNet.Wpf/src/WindowsBase/System/Windows/Threading/Dispatcher.cs#L2755-L2767
+                var exceptionDataKey = items.FirstOrDefault(i => i.Key.EndsWith(".System.Object") && string.IsNullOrWhiteSpace(i.Value));
+                if (exceptionDataKey != null) items.Remove(exceptionDataKey);
+
             }
 
             if (application.MainWindow?.Width > 0) items.Add(new Item("Browser-Width", ((int)application.MainWindow.Width).ToString()));
