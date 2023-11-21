@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elmah.Io.Wpf.Net80", "samples\Elmah.Io.Wpf.Net80\Elmah.Io.Wpf.Net80.csproj", "{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B9A1E279-07FF-4A59-A0B9-323B9C26B47E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elmah.Io.Wpf.Test", "test\Elmah.Io.Wpf.Test\Elmah.Io.Wpf.Test.csproj", "{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,10 @@ Global
 		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,7 @@ Global
 		{B823CB00-23ED-46D2-8BDD-DEBCCBD0F03C} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
 		{91FC2471-9D24-444D-B5E1-5CD20EC5AFF9} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
 		{04AB5CB1-67BE-4083-B422-ACAEBA7FD79F} = {3D9A5267-63E1-4E4C-8789-6B7AF5B5FD05}
+		{1FEFAF63-9877-4C8B-AE8F-11BBB1FC9BB2} = {B9A1E279-07FF-4A59-A0B9-323B9C26B47E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C1F1BB5-86C9-48CE-9874-8643E47F4A3B}

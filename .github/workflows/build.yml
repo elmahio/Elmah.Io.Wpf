@@ -19,6 +19,7 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
+          7.0.x
           8.0.x
 
     - uses: nuget/setup-nuget@v1
@@ -31,6 +32,9 @@ jobs:
 
     - name: Build
       run: msbuild Elmah.Io.Wpf.sln /t:Build /p:Configuration=Release /p:Version=5.1.${{ github.run_number }}-pre
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       run: dotnet pack --configuration Release src/Elmah.Io.Wpf/Elmah.Io.Wpf.csproj /p:Version=5.1.${{ github.run_number }}-pre
