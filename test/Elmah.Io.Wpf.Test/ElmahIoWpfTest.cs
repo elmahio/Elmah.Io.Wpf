@@ -14,7 +14,9 @@ namespace Elmah.Io.Wpf.Test
         [Apartment(ApartmentState.STA)]
         public void Test()
         {
-            var app = new Application();
+            // Application needs to be initialized before running the test but we don't need the variable afterwards
+            _ = new Application();
+
             var options = new ElmahIoWpfOptions
             {
                 ApiKey = "hello",
@@ -28,7 +30,7 @@ namespace Elmah.Io.Wpf.Test
             elmahIoClient.Messages.Returns(messagesClient);
 
             var field = typeof(ElmahIoWpf).GetField("_logger", BindingFlags.Static | BindingFlags.NonPublic);
-            field.SetValue(null, elmahIoClient);
+            field?.SetValue(null, elmahIoClient);
 
             ElmahIoWpf.AddBreadcrumb(new Breadcrumb
             {
@@ -47,8 +49,10 @@ namespace Elmah.Io.Wpf.Test
                 ShowInTaskbar = false,
                 ShowActivated = false,
             };
-            var btn = new Button();
-            btn.Name = "MyButton";
+            var btn = new Button
+            {
+                Name = "MyButton"
+            };
             btn.Click += (sender, args) => { };
             window.Content = btn;
             window.Show();

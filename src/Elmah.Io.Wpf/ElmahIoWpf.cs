@@ -18,8 +18,8 @@ namespace Elmah.Io.Wpf
     /// </summary>
     public static class ElmahIoWpf
     {
-        internal static string _assemblyVersion = typeof(ElmahIoWpf).Assembly.GetName().Version.ToString();
-        internal static string _presentationFrameworkAssemblyVersion = typeof(Application).Assembly.GetName().Version.ToString();
+        private static readonly string _assemblyVersion = typeof(ElmahIoWpf).Assembly.GetName().Version.ToString();
+        private static readonly string _presentationFrameworkAssemblyVersion = typeof(Application).Assembly.GetName().Version.ToString();
 
         private static ElmahIoWpfOptions _options;
         private static IElmahioAPI _logger;
@@ -31,7 +31,9 @@ namespace Elmah.Io.Wpf
         public static void Init(ElmahIoWpfOptions options)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
             if (string.IsNullOrWhiteSpace(options.ApiKey)) throw new ArgumentNullException(nameof(options.ApiKey));
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
             if (options.LogId == Guid.Empty) throw new ArgumentException(nameof(options.LogId));
 
             _options = options;
@@ -124,9 +126,8 @@ namespace Elmah.Io.Wpf
 
         private static void Button_Click(object sender, RoutedEventArgs e)
         {
-            var button = e.Source as Button;
             string message = null;
-            if (button != null)
+            if (e.Source is Button button)
             {
                 if (!string.IsNullOrWhiteSpace(button.Name)) message = button.Name;
                 else if (button.Content is string) message = button.Content.ToString();
@@ -192,7 +193,7 @@ namespace Elmah.Io.Wpf
 
         private static IList<Breadcrumb> Breadcrumbs()
         {
-            if (_breadcrumbs == null || _breadcrumbs.Count == 0) return null;
+            if (_breadcrumbs == null || _breadcrumbs.Count == 0) return new List<Breadcrumb>();
 
             var utcNow = DateTime.UtcNow;
 
@@ -228,7 +229,7 @@ namespace Elmah.Io.Wpf
                 // item being added with the key System.Object and a null value. Since this will never be interesting for anyone
                 // outside of the Dispatcher we remove it. The source code doing this small trick is here:
                 // https://github.com/dotnet/wpf/blob/ed058c1ab3f5594110731354794c5dfa0debdbd4/src/Microsoft.DotNet.Wpf/src/WindowsBase/System/Windows/Threading/Dispatcher.cs#L2755-L2767
-                var exceptionDataKey = items.FirstOrDefault(i => i.Key.EndsWith(".System.Object") && string.IsNullOrWhiteSpace(i.Value));
+                var exceptionDataKey = items.Find(i => i.Key.EndsWith(".System.Object") && string.IsNullOrWhiteSpace(i.Value));
                 if (exceptionDataKey != null) items.Remove(exceptionDataKey);
 
             }
@@ -248,7 +249,7 @@ namespace Elmah.Io.Wpf
         {
             try
             {
-                string machine = null;
+                var machineBuilder = new StringBuilder();
 
                 using (var searcher = new System.Management.ManagementObjectSearcher("Select Manufacturer, Model from Win32_ComputerSystem"))
                 {
@@ -258,7 +259,7 @@ namespace Elmah.Io.Wpf
                         {
                             string manufacturer = item["Manufacturer"].ToString();
                             string model = item["Model"].ToString();
-                            machine = manufacturer + " " + model;
+                            machineBuilder.Append(manufacturer).Append(' ').Append(model);
                         }
                     }
                 }
@@ -266,24 +267,28 @@ namespace Elmah.Io.Wpf
                 using (var searcher = new System.Management.ManagementObjectSearcher(
                        "Select * from Win32_DisplayConfiguration"))
                 {
-                    string graphicsCard = string.Empty;
                     using (var managementObjects = searcher.Get())
                     {
                         foreach (var item in managementObjects)
                         {
                             string gpu = item["Description"].ToString();
 
-                            machine += ", " + gpu;
+                            machineBuilder.Append(", ").Append(gpu);
                         }
                     }
                 }
 
+                var machine = machineBuilder.ToString();
                 if (!string.IsNullOrWhiteSpace(machine))
                 {
                     items.Add(new Item("Machine", machine));
                 }
             }
-            catch {}
+            catch
+            {
+                // In case an error happened while trying to get the machine property, don't log anything about the machine.
+                // The entire logging request should not fail in case there's a problem getting machine details.
+            }
         }
 
         private static string UserAgent()
