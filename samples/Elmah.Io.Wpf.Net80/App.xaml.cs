@@ -7,6 +7,7 @@ namespace Elmah.Io.Wpf.Net80
     /// </summary>
     public partial class App : Application
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "For test purposes only")]
         public App()
         {
             ElmahIoWpf.Init(new ElmahIoWpfOptions

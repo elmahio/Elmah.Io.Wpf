@@ -28,12 +28,13 @@ namespace Elmah.Io.Wpf
         /// <summary>
         /// Initialize logging of all uncaught errors to elmah.io.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Argument", "S3928")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Argument", "CA2208")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Argument", "IDE0079")]
         public static void Init(ElmahIoWpfOptions options)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
-#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
             if (string.IsNullOrWhiteSpace(options.ApiKey)) throw new ArgumentNullException(nameof(options.ApiKey));
-#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
             if (options.LogId == Guid.Empty) throw new ArgumentException(nameof(options.LogId));
 
             _options = options;
@@ -86,10 +87,10 @@ namespace Elmah.Io.Wpf
                 Breadcrumbs = Breadcrumbs(),
                 Application = _options.Application,
                 Url = Url(),
-                ServerVariables = new List<Item>
-                {
-                    new Item("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion.Version}; ENGINE=WPF"),
-                }
+                ServerVariables =
+                [
+                    new("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion.Version}; ENGINE=WPF"),
+                ]
             };
 
             if (_options.OnFilter != null && _options.OnFilter(createMessage))
@@ -193,7 +194,7 @@ namespace Elmah.Io.Wpf
 
         private static IList<Breadcrumb> Breadcrumbs()
         {
-            if (_breadcrumbs == null || _breadcrumbs.Count == 0) return new List<Breadcrumb>();
+            if (_breadcrumbs == null || _breadcrumbs.Count == 0) return [];
 
             var utcNow = DateTime.UtcNow;
 
@@ -231,7 +232,6 @@ namespace Elmah.Io.Wpf
                 // https://github.com/dotnet/wpf/blob/ed058c1ab3f5594110731354794c5dfa0debdbd4/src/Microsoft.DotNet.Wpf/src/WindowsBase/System/Windows/Threading/Dispatcher.cs#L2755-L2767
                 var exceptionDataKey = items.Find(i => i.Key.EndsWith(".System.Object") && string.IsNullOrWhiteSpace(i.Value));
                 if (exceptionDataKey != null) items.Remove(exceptionDataKey);
-
             }
 
             if (application.MainWindow?.Width > 0) items.Add(new Item("Browser-Width", ((int)application.MainWindow.Width).ToString()));
@@ -253,28 +253,24 @@ namespace Elmah.Io.Wpf
 
                 using (var searcher = new System.Management.ManagementObjectSearcher("Select Manufacturer, Model from Win32_ComputerSystem"))
                 {
-                    using (var managementObjects = searcher.Get())
+                    using var managementObjects = searcher.Get();
+                    foreach (var item in managementObjects)
                     {
-                        foreach (var item in managementObjects)
-                        {
-                            string manufacturer = item["Manufacturer"].ToString();
-                            string model = item["Model"].ToString();
-                            machineBuilder.Append(manufacturer).Append(' ').Append(model);
-                        }
+                        string manufacturer = item["Manufacturer"].ToString();
+                        string model = item["Model"].ToString();
+                        machineBuilder.Append(manufacturer).Append(' ').Append(model);
                     }
                 }
 
                 using (var searcher = new System.Management.ManagementObjectSearcher(
                        "Select * from Win32_DisplayConfiguration"))
                 {
-                    using (var managementObjects = searcher.Get())
+                    using var managementObjects = searcher.Get();
+                    foreach (var item in managementObjects)
                     {
-                        foreach (var item in managementObjects)
-                        {
-                            string gpu = item["Description"].ToString();
+                        string gpu = item["Description"].ToString();
 
-                            machineBuilder.Append(", ").Append(gpu);
-                        }
+                        machineBuilder.Append(", ").Append(gpu);
                     }
                 }
 
@@ -295,7 +291,7 @@ namespace Elmah.Io.Wpf
         {
             return new StringBuilder()
                 .Append(new ProductInfoHeaderValue(new ProductHeaderValue("Elmah.Io.Wpf", _assemblyVersion)).ToString())
-                .Append(" ")
+                .Append(' ')
                 .Append(new ProductInfoHeaderValue(new ProductHeaderValue("PresentationFramework", _presentationFrameworkAssemblyVersion)).ToString())
                 .ToString();
         }
