@@ -19,7 +19,6 @@ namespace Elmah.Io.Wpf
     public static class ElmahIoWpf
     {
         private static readonly string _assemblyVersion = typeof(ElmahIoWpf).Assembly.GetName().Version.ToString();
-        private static readonly string _elmahIoClientAssemblyVersion = typeof(IElmahioAPI).Assembly.GetName().Version.ToString();
         private static readonly string _presentationFrameworkAssemblyVersion = typeof(Application).Assembly.GetName().Version.ToString();
 
         private static ElmahIoWpfOptions _options;
@@ -66,8 +65,6 @@ namespace Elmah.Io.Wpf
                 if (!Debugger.IsAttached)
                     Log(args.Exception);
             };
-
-            CreateInstallation();
         }
 
         /// <summary>
@@ -297,38 +294,6 @@ namespace Elmah.Io.Wpf
                 .Append(' ')
                 .Append(new ProductInfoHeaderValue(new ProductHeaderValue("PresentationFramework", _presentationFrameworkAssemblyVersion)).ToString())
                 .ToString();
-        }
-
-        private static void CreateInstallation()
-        {
-            try
-            {
-                var loggerInfo = new LoggerInfo
-                {
-                    Type = "Elmah.Io.Wpf",
-                    Properties = [],
-                    ConfigFiles = [],
-                    Assemblies =
-                    [
-                        new AssemblyInfo { Name = "Elmah.Io.Wpf", Version = _assemblyVersion },
-                        new AssemblyInfo { Name = "Elmah.Io.Client", Version = _elmahIoClientAssemblyVersion },
-                        new AssemblyInfo { Name = "PresentationFramework", Version = _presentationFrameworkAssemblyVersion }
-                    ],
-                };
-
-                var installation = new CreateInstallation
-                {
-                    Type = "windowsapp",
-                    Name = _options.Application,
-                    Loggers = [loggerInfo]
-                };
-
-                _logger.Installations.Create(_options.LogId.ToString(), installation);
-            }
-            catch
-            {
-                // We don't want to crash the entire application if the installation fails. Carry on.
-            }
         }
     }
 }
