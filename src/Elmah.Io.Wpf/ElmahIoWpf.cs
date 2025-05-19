@@ -314,6 +314,7 @@ namespace Elmah.Io.Wpf
                         new AssemblyInfo { Name = "Elmah.Io.Client", Version = _elmahIoClientAssemblyVersion },
                         new AssemblyInfo { Name = "PresentationFramework", Version = _presentationFrameworkAssemblyVersion }
                     ],
+                    EnvironmentVariables = [],
                 };
 
                 var installation = new CreateInstallation
@@ -323,7 +324,12 @@ namespace Elmah.Io.Wpf
                     Loggers = [loggerInfo]
                 };
 
-                _logger.Installations.Create(_options.LogId.ToString(), installation);
+                EnvironmentVariablesHelper.GetElmahIoAppSettingsEnvironmentVariables().ForEach(v => loggerInfo.EnvironmentVariables.Add(v));
+                EnvironmentVariablesHelper.GetDotNetEnvironmentVariables().ForEach(v => loggerInfo.EnvironmentVariables.Add(v));
+
+                _options.OnInstallation?.Invoke(installation);
+
+                _logger.Installations.CreateAndNotify(_options.LogId, installation);
             }
             catch
             {
