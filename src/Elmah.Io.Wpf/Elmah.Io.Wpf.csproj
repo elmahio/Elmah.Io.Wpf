@@ -21,6 +21,7 @@
     <EnablePackageValidation>true</EnablePackageValidation>
     <UseWPF>true</UseWPF>
     <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
     <!-- SourceLink -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>

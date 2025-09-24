@@ -29,7 +29,7 @@ namespace Elmah.Io.Wpf.Test
             var elmahIoClient = Substitute.For<IElmahioAPI>();
             elmahIoClient.Messages.Returns(messagesClient);
 
-            var field = typeof(ElmahIoWpf).GetField("_logger", BindingFlags.Static | BindingFlags.NonPublic);
+            var field = typeof(ElmahIoWpf).GetField("logger", BindingFlags.Static | BindingFlags.NonPublic);
             field?.SetValue(null, elmahIoClient);
 
             ElmahIoWpf.AddBreadcrumb(new Breadcrumb
