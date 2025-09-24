@@ -55,7 +55,7 @@ jobs:
       run: dotnet pack --configuration Release src/Elmah.Io.Wpf/Elmah.Io.Wpf.csproj /p:Version=5.3.${{ github.run_number }}-pre
 
     - name: Install dotnet-validate
-      run: dotnet tool install --global dotnet-validate --version 0.0.1-preview.304
+      run: dotnet tool install --global dotnet-validate --version 0.0.1-preview.537
 
     - name: Validate
       run: dotnet-validate package local src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.5.3.${{ github.run_number }}-pre.nupkg
