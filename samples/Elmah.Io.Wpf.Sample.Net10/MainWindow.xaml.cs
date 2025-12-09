@@ -1,8 +1,7 @@
 ﻿using Elmah.Io.Client;
-using System;
 using System.Windows;
 
-namespace Elmah.Io.Wpf.Net60
+namespace Elmah.Io.Wpf.Sample.Net10
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

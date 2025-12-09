@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main apiv4 ]
   pull_request:
     branches: [ main ]
 
@@ -12,15 +12,15 @@ jobs:
     runs-on: windows-2025
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
           9.0.x
+          10.0.x
 
     - uses: nuget/setup-nuget@v2
 
@@ -46,22 +46,22 @@ jobs:
         fi
 
     - name: Build
-      run: msbuild Elmah.Io.Wpf.sln /t:Build /p:Configuration=Release /p:Version=5.3.${{ github.run_number }}
+      run: msbuild Elmah.Io.Wpf.sln /t:Build /p:Configuration=Release /p:Version=6.0.${{ github.run_number }}-pre
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
-      run: dotnet pack --configuration Release src/Elmah.Io.Wpf/Elmah.Io.Wpf.csproj /p:Version=5.3.${{ github.run_number }}
+      run: dotnet pack --configuration Release src/Elmah.Io.Wpf/Elmah.Io.Wpf.csproj /p:Version=6.0.${{ github.run_number }}-pre
 
     - name: Install dotnet-validate
       run: dotnet tool install --global dotnet-validate --version 0.0.1-preview.537
 
     - name: Validate
-      run: dotnet-validate package local src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.5.3.${{ github.run_number }}.nupkg
+      run: dotnet-validate package local src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.6.0.${{ github.run_number }}-pre.nupkg
 
     - name: Push to nuget.org
-      run: dotnet nuget push src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.5.3.${{ github.run_number }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.6.0.${{ github.run_number }}-pre.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
       if: ${{ github.event_name == 'push' }}
 
     - name: Refresh Bugster
@@ -75,4 +75,4 @@ jobs:
              -H "Content-Type: application/json" `
              -d "$json" `
              $env:FUNCTION_APP_URL
-      if: ${{ github.event_name == 'push' }}
+      if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}

@@ -214,7 +214,7 @@ namespace Elmah.Io.Wpf
             return Environment.GetEnvironmentVariable("COMPUTERNAME");
         }
 
-        private static IList<Breadcrumb> Breadcrumbs()
+        private static List<Breadcrumb> Breadcrumbs()
         {
             if (breadcrumbs == null || breadcrumbs.Count == 0) return [];
 
