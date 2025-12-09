@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,6 +98,7 @@ namespace Elmah.Io.Wpf
                 ServerVariables =
                 [
                     new("User-Agent", $"X-ELMAHIO-APPLICATION; OS=Windows; OSVERSION={Environment.OSVersion.Version}; ENGINE=WPF"),
+                    new("Client-IP", ClientIp())
                 ]
             };
 
@@ -113,6 +116,31 @@ namespace Elmah.Io.Wpf
             catch (Exception ex)
             {
                 options.OnError?.Invoke(createMessage, ex);
+            }
+        }
+
+        private static string? ClientIp()
+        {
+            try
+            {
+                // Find the NIC that has an IPv4 default gateway
+                var nic = NetworkInterface
+                    .GetAllNetworkInterfaces()
+                    .FirstOrDefault(n => n.OperationalStatus == OperationalStatus.Up && n.GetIPProperties().GatewayAddresses.Any(g => g.Address.AddressFamily == AddressFamily.InterNetwork));
+
+                if (nic == null) return null;
+
+                // Get IPv4 address from that NIC
+                var ip = nic
+                    .GetIPProperties()
+                    .UnicastAddresses
+                    .FirstOrDefault(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
+
+                return ip?.Address.ToString();
+            }
+            catch
+            {
+                return null;
             }
         }
 
