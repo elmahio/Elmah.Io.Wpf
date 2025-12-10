@@ -69,5 +69,5 @@ jobs:
       with:
         signing: ${{ secrets.BUGSTER_SIGNING_KEY }}
         url: ${{ secrets.FUNCTION_APP_URL }}
-        repository: ${{ github.repository }}
+        repository: ${{ github.event.repository.name }}
       if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
