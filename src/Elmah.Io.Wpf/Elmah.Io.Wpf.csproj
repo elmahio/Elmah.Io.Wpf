@@ -32,11 +32,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.400" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Elmah.Io.Client" Version="[6.0.133-pre,7)" />
+    <PackageReference Include="Elmah.Io.Client" Version="[6.0.140-pre,7)" />
     <PackageReference Include="System.Management" Version="[4.6.0,)" />
   </ItemGroup>
 
