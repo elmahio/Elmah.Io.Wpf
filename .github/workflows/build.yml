@@ -12,10 +12,10 @@ jobs:
     runs-on: windows-2025
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: |
           8.0.x
@@ -55,7 +55,7 @@ jobs:
       run: dotnet pack --configuration Release src/Elmah.Io.Wpf/Elmah.Io.Wpf.csproj /p:Version=6.0.${{ github.run_number }}-pre
 
     - name: Install dotnet-validate
-      run: dotnet tool install --global dotnet-validate --version 0.0.1-preview.537
+      run: dotnet tool install --global dotnet-validate --version 0.0.1-preview.582
 
     - name: Validate
       run: dotnet-validate package local src/Elmah.Io.Wpf/bin/Release/Elmah.Io.Wpf.6.0.${{ github.run_number }}-pre.nupkg
